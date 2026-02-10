@@ -31,6 +31,22 @@ import { EventRow } from "../api.types";
             <label>Tax ID</label>
             <input [(ngModel)]="taxId" placeholder="Optional" />
           </div>
+          <div class="row">
+            <label>Contact First Name</label>
+            <input [(ngModel)]="contactFirstName" placeholder="Optional" />
+          </div>
+          <div class="row">
+            <label>Contact Last Name</label>
+            <input [(ngModel)]="contactLastName" placeholder="Optional" />
+          </div>
+          <div class="row">
+            <label>Contact Email</label>
+            <input type="email" [(ngModel)]="contactEmail" placeholder="user@example.com" />
+          </div>
+          <div class="row">
+            <label>Contact Phone</label>
+            <input [(ngModel)]="contactPhone" placeholder="Optional" />
+          </div>
           <div class="actions">
             <button class="btn-primary" (click)="save()" [disabled]="busy() || !desc || !date">Save</button>
             <button class="btn-secondary" (click)="cancel()">Cancel</button>
@@ -49,6 +65,10 @@ import { EventRow } from "../api.types";
                   <th (click)="toggleSort('event_locator')">Locator {{ sortColumn() === 'event_locator' ? (sortDirection() === 'asc' ? '↑' : '↓') : '' }}</th>
                   <th (click)="toggleSort('event_desc')">Desc {{ sortColumn() === 'event_desc' ? (sortDirection() === 'asc' ? '↑' : '↓') : '' }}</th>
                   <th (click)="toggleSort('event_date')">Date {{ sortColumn() === 'event_date' ? (sortDirection() === 'asc' ? '↑' : '↓') : '' }}</th>
+                  <th (click)="toggleSort('contact_first_name')">Contact First Name {{ sortColumn() === 'contact_first_name' ? (sortDirection() === 'asc' ? '↑' : '↓') : '' }}</th>
+                  <th (click)="toggleSort('contact_last_name')">Contact Last Name {{ sortColumn() === 'contact_last_name' ? (sortDirection() === 'asc' ? '↑' : '↓') : '' }}</th>
+                  <th (click)="toggleSort('contact_email')">Contact Email {{ sortColumn() === 'contact_email' ? (sortDirection() === 'asc' ? '↑' : '↓') : '' }}</th>
+                  <th (click)="toggleSort('contact_phone')">Contact Phone {{ sortColumn() === 'contact_phone' ? (sortDirection() === 'asc' ? '↑' : '↓') : '' }}</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -58,6 +78,10 @@ import { EventRow } from "../api.types";
                   <td><code>{{ e.event_locator }}</code></td>
                   <td>{{ e.event_desc }}</td>
                   <td>{{ e.event_date }}</td>
+                  <td>{{ e.contact_first_name }}</td>
+                  <td>{{ e.contact_last_name }}</td>
+                  <td>{{ e.contact_email }}</td>
+                  <td>{{ e.contact_phone }}</td>
                   <td>
                     <button class="btn-danger btn-sm" (click)="delete($event, e.event_id)">Delete</button>
                   </td>
@@ -101,6 +125,10 @@ export class EventFormComponent implements OnInit {
   desc = "";
   date = "";
   taxId = "";
+  contactFirstName = "";
+  contactLastName = "";
+  contactEmail = "";
+  contactPhone = "";
   existingId = signal<number | null>(null);
   events = signal<EventRow[]>([]);
   sortColumn = signal<keyof EventRow | null>(null);
@@ -151,6 +179,10 @@ export class EventFormComponent implements OnInit {
     // Sanitize ISO date to YYYY-MM-DD for backend validation
     this.date = e.event_date ? e.event_date.split("T")[0] : "";
     this.taxId = e.event_tax_id || "";
+    this.contactFirstName = e.contact_first_name || "";
+    this.contactLastName = e.contact_last_name || "";
+    this.contactEmail = e.contact_email || "";
+    this.contactPhone = e.contact_phone || "";
     this.existingId.set(e.event_id);
   }
 
@@ -158,6 +190,10 @@ export class EventFormComponent implements OnInit {
     this.desc = "";
     this.date = "";
     this.taxId = "";
+    this.contactFirstName = "";
+    this.contactLastName = "";
+    this.contactEmail = "";
+    this.contactPhone = "";
     this.existingId.set(null);
     this.success.set(null);
     this.error.set(null);
@@ -176,7 +212,11 @@ export class EventFormComponent implements OnInit {
         const res = await firstValueFrom(this.api.updateEvent(this.existingId()!, {
           event_desc: this.desc,
           event_date: this.date,
-          event_tax_id: this.taxId || null
+          event_tax_id: this.taxId || null,
+          contact_first_name: this.contactFirstName || null,
+          contact_last_name: this.contactLastName || null,
+          contact_email: this.contactEmail || null,
+          contact_phone: this.contactPhone || null
         }));
         this.success.set(`Updated event ${res.event_id}`);
         this.cancel();
@@ -185,7 +225,11 @@ export class EventFormComponent implements OnInit {
         const res = await firstValueFrom(this.api.createEvent({
           event_desc: this.desc,
           event_date: this.date,
-          event_tax_id: this.taxId || null
+          event_tax_id: this.taxId || null,
+          contact_first_name: this.contactFirstName || null,
+          contact_last_name: this.contactLastName || null,
+          contact_email: this.contactEmail || null,
+          contact_phone: this.contactPhone || null
         }));
         this.success.set(`Created event ${res.event_id}`);
         this.cancel();

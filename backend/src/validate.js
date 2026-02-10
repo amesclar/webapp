@@ -4,6 +4,10 @@ export const EventCreate = z.object({
   event_desc: z.string().min(1).max(100).refine(val => !val.includes('*'), { message: "Asterisk cannot be used" }),
   event_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Use YYYY-MM-DD"),
   event_tax_id: z.string().max(16).refine(val => !val.includes('*'), { message: "Asterisk cannot be used" }).nullable().optional(),
+  contact_first_name: z.string().max(100).refine(val => !val.includes('*'), { message: "Asterisk cannot be used" }).nullable().optional(),
+  contact_last_name: z.string().max(100).refine(val => !val.includes('*'), { message: "Asterisk cannot be used" }).nullable().optional(),
+  contact_email: z.string().email("Invalid email address").refine(val => !val.includes('*'), { message: "Asterisk cannot be used" }).nullable().optional(),
+  contact_phone: z.string().max(100).refine(val => !val.includes('*'), { message: "Asterisk cannot be used" }).nullable().optional(),
 });
 
 export const BidderCreate = z.object({

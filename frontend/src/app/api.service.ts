@@ -16,11 +16,27 @@ export class ApiService {
         return this.http.get<EventRow[]>(`${this.base}/events`, { params });
     }
 
-    createEvent(payload: { event_desc: string; event_date: string; event_tax_id?: string | null }) {
+    createEvent(payload: {
+        event_desc: string;
+        event_date: string;
+        event_tax_id?: string | null;
+        contact_first_name?: string | null;
+        contact_last_name?: string | null;
+        contact_email?: string | null;
+        contact_phone?: string | null;
+    }) {
         return this.http.post<EventRow>(`${this.base}/events`, payload);
     }
 
-    updateEvent(id: number, payload: { event_desc: string; event_date: string; event_tax_id?: string | null }) {
+    updateEvent(id: number, payload: {
+        event_desc: string;
+        event_date: string;
+        event_tax_id?: string | null;
+        contact_first_name?: string | null;
+        contact_last_name?: string | null;
+        contact_email?: string | null;
+        contact_phone?: string | null;
+    }) {
         return this.http.put<EventRow>(`${this.base}/events/${id}`, payload);
     }
 

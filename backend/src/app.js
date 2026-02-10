@@ -80,10 +80,18 @@ export function createApp() {
     try {
       const body = parseBody(EventCreate, req.body);
       const r = await query(
-        `insert into events (event_desc, event_date, event_tax_id)
-         values ($1, $2::date, $3)
+        `insert into events (event_desc, event_date, event_tax_id, contact_first_name, contact_last_name, contact_email, contact_phone)
+         values ($1, $2::date, $3, $4, $5, $6, $7)
          returning *`,
-        [body.event_desc, body.event_date, body.event_tax_id ?? null],
+        [
+          body.event_desc,
+          body.event_date,
+          body.event_tax_id ?? null,
+          body.contact_first_name ?? null,
+          body.contact_last_name ?? null,
+          body.contact_email ?? null,
+          body.contact_phone ?? null,
+        ],
       );
       res.status(201).json(r.rows[0]);
     } catch (e) {
@@ -95,10 +103,26 @@ export function createApp() {
     try {
       const body = parseBody(EventUpdate, req.body);
       const r = await query(
-        `update events set event_desc = $1, event_date = $2, event_tax_id = $3
-         where event_id = $4
+        `update events set 
+          event_desc = $1, 
+          event_date = $2, 
+          event_tax_id = $3,
+          contact_first_name = $4,
+          contact_last_name = $5,
+          contact_email = $6,
+          contact_phone = $7
+         where event_id = $8
          returning *`,
-        [body.event_desc, body.event_date, body.event_tax_id ?? null, req.params.id],
+        [
+          body.event_desc,
+          body.event_date,
+          body.event_tax_id ?? null,
+          body.contact_first_name ?? null,
+          body.contact_last_name ?? null,
+          body.contact_email ?? null,
+          body.contact_phone ?? null,
+          req.params.id
+        ],
       );
       if (r.rows.length === 0) return res.status(404).json({ error: "NotFound" });
       res.json(r.rows[0]);

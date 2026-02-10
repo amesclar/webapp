@@ -12,7 +12,16 @@ CREATE TABLE IF NOT EXISTS events (
   ) STORED,
   event_desc      VARCHAR(100) NOT NULL,
   event_date      DATE NOT NULL,
-  event_tax_id    VARCHAR(16)
+  event_tax_id    VARCHAR(16),
+  contact_first_name VARCHAR(100),
+  contact_last_name  VARCHAR(100),
+  contact_email      VARCHAR(100),
+  contact_phone      VARCHAR(100),
+
+  CONSTRAINT chk_events_email_format
+  CHECK (
+    contact_email IS NULL OR contact_email ~* '^[A-Z0-9._%+\-]+@[A-Z0-9.\-]+\.[A-Z]{2,}$'
+  )
 );
 
 -- BIDDERS
