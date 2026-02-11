@@ -22,6 +22,10 @@ import { EventRow } from "./api.types";
         </p>
         
         <div class="grid">
+          <div class="card clickable" [routerLink]="['/event-update']" [queryParams]="{ event_locator: event()?.event_locator }">
+            <h2>Events</h2>
+            <p>Update details for this event.</p>
+          </div>
           <div class="card clickable" [routerLink]="['/bidders']" [queryParams]="{ event_locator: event()?.event_locator }">
             <h2>Bidders</h2>
             <p>Register and manage bidders for this event.</p>
@@ -59,17 +63,18 @@ import { EventRow } from "./api.types";
     }
     h1 { color: #000; margin-bottom: 10px; }
     .subtitle { color: #000; margin-bottom: 40px; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
     .card { 
-      padding: 30px; 
+      padding: 24px; 
       background: white; 
-      border-radius: 15px; 
+      border-radius: 12px; 
       box-shadow: 0 4px 15px rgba(0,0,0,0.08); 
       transition: all 0.3s ease;
       color: #000;
+      text-align: center;
     }
     .card:hover { 
-      transform: translateY(-8px); 
+      transform: translateY(-5px); 
       box-shadow: 0 12px 25px rgba(0,0,0,0.12); 
     }
     .clickable { cursor: pointer; }

@@ -14,6 +14,10 @@ export const routes: Routes = [
         loadComponent: () => import("./events/event-form.component").then(m => m.EventFormComponent),
     },
     {
+        path: "event-update",
+        loadComponent: () => import("./events/user-event-form.component").then(m => m.UserEventFormComponent),
+    },
+    {
         path: "bidders",
         loadComponent: () => import("./bidders/bidder-form.component").then(m => m.BidderFormComponent),
     },
