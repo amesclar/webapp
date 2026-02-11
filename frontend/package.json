@@ -37,5 +37,10 @@
     "@angular/cli": "^21.1.2",
     "@angular/compiler-cli": "^21.1.0",
     "typescript": "~5.9.2"
+  },
+  "overrides": {
+    "webpack": "5.104.1",
+    "@isaacs/brace-expansion": "5.0.1",
+    "@modelcontextprotocol/sdk": "1.26.0"
   }
 }
