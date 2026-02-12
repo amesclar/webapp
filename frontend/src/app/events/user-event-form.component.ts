@@ -55,7 +55,7 @@ import { EventRow } from "../api.types";
         <div class="actions">
           <button class="btn-primary" (click)="save()" [disabled]="busy() || !desc || !date">Save</button>
           <form (submit)="confirmDelete($event)" style="display: inline;">
-            <button type="submit" class="btn-danger" [disabled]="busy()">Delete</button>
+            <button type="submit" class="btn-danger" disabled title="Delete disabled for users">Delete</button>
           </form>
           <button class="btn-secondary" (click)="back()">Cancel</button>
         </div>
