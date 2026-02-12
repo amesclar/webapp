@@ -61,7 +61,10 @@ import { EventRow, BidderRow } from "../api.types";
         </div>
 
         <div class="card list-card" *ngIf="selectedEventId()">
-          <h2>Bidders ({{ bidders().length }})</h2>
+          <div class="list-header">
+            <h2>Bidders ({{ bidders().length }})</h2>
+            <button class="btn-info btn-sm" (click)="summarize()" [disabled]="bidders().length === 0">Summarize Emails</button>
+          </div>
           <div class="scroll-area">
             <table>
               <thead>
@@ -101,8 +104,10 @@ import { EventRow, BidderRow } from "../api.types";
     .btn-primary { background: #007bff; color: white; }
     .btn-secondary { background: #6c757d; color: white; }
     .btn-danger { background: #dc3545; color: white; }
+    .btn-info { background: #17a2b8; color: white; }
     .btn-sm { padding: 5px 10px; font-size: 12px; }
     button:disabled { opacity: 0.6; cursor: not-allowed; }
+    .list-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
     .scroll-area { max-height: 500px; overflow-y: auto; }
     table { width: 100%; border-collapse: collapse; }
     th { text-align: left; padding: 10px; border-bottom: 2px solid #eee; cursor: pointer; user-select: none; }
@@ -304,6 +309,25 @@ export class BidderFormComponent implements OnInit {
     } else {
       this.sortColumn.set(col);
       this.sortDirection.set('asc');
+    }
+  }
+
+  async summarize() {
+    const data = this.bidders();
+    if (data.length === 0) return;
+
+    const summary = data
+      .map(b => `${b.bidder_first_name} ${b.bidder_last_name}<${b.bidder_email || ""}>`)
+      .join(",");
+
+    try {
+      await navigator.clipboard.writeText(summary);
+      this.success.set("Email summary copied to clipboard!");
+      setTimeout(() => this.success.set(null), 3000);
+    } catch (err) {
+      console.error("Failed to copy", err);
+      // Fallback: alert the user with the string
+      alert(summary);
     }
   }
 }
