@@ -50,6 +50,25 @@ ALTER TABLE bidders
     bidder_email IS NULL OR bidder_email ~* '^[A-Z0-9._%+\-]+@[A-Z0-9.\-]+\.[A-Z]{2,}$'
   );
 
+-- Trigger function to auto-populate bidder_num if null
+CREATE OR REPLACE FUNCTION set_bidder_num()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF NEW.bidder_num IS NULL THEN
+    SELECT COALESCE(MAX(bidder_num), 0) + 1
+    INTO NEW.bidder_num
+    FROM bidders
+    WHERE event_id = NEW.event_id;
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_set_bidder_num
+BEFORE INSERT OR UPDATE ON bidders
+FOR EACH ROW
+EXECUTE FUNCTION set_bidder_num();
+
 -- ITEMS
 CREATE TABLE IF NOT EXISTS items (
   item_id      INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
