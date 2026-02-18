@@ -18,7 +18,7 @@ import { EventRow } from "./api.types";
         <p class="subtitle">
           ID: {{ event()?.event_id }} | 
           Locator: <code>{{ event()?.event_locator }}</code> |
-          Date: {{ event()?.event_date }}
+          Date: {{ event()?.event_date?.split('T')?.[0] }}
         </p>
         
         <div class="grid">

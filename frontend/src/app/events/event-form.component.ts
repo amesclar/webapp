@@ -77,7 +77,7 @@ import { EventRow } from "../api.types";
                   <td style="font-weight: bold;">{{ e.event_id }}</td>
                   <td><code>{{ e.event_locator }}</code></td>
                   <td>{{ e.event_desc }}</td>
-                  <td>{{ e.event_date }}</td>
+                  <td>{{ e.event_date.split('T')[0] }}</td>
                   <td>{{ e.contact_first_name }}</td>
                   <td>{{ e.contact_last_name }}</td>
                   <td>{{ e.contact_email }}</td>
