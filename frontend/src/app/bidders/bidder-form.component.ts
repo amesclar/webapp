@@ -45,6 +45,26 @@ import { EventRow, BidderRow } from "../api.types";
               <input [(ngModel)]="email" />
             </div>
             <div class="row">
+              <label>Address 1</label>
+              <input [(ngModel)]="address1" />
+            </div>
+            <div class="row">
+              <label>Address 2</label>
+              <input [(ngModel)]="address2" />
+            </div>
+            <div class="row">
+              <label>City</label>
+              <input [(ngModel)]="city" />
+            </div>
+            <div class="row">
+              <label>State</label>
+              <input [(ngModel)]="state" maxlength="2" placeholder="e.g. CA" />
+            </div>
+            <div class="row">
+              <label>Zip</label>
+              <input [(ngModel)]="zip" placeholder="xxxxx or xxxxx-xxxx" />
+            </div>
+            <div class="row">
               <label>Bidder #</label>
               <input [(ngModel)]="bidderNum" placeholder="Optional" />
             </div>
@@ -130,6 +150,11 @@ export class BidderFormComponent implements OnInit {
   firstName = "";
   lastName = "";
   email = "";
+  address1 = "";
+  address2 = "";
+  city = "";
+  state = "";
+  zip = "";
   bidderNum = "";
   existingId = signal<number | null>(null);
   bidders = signal<BidderRow[]>([]);
@@ -225,6 +250,11 @@ export class BidderFormComponent implements OnInit {
     this.firstName = b.bidder_first_name;
     this.lastName = b.bidder_last_name;
     this.email = b.bidder_email || "";
+    this.address1 = b.bidder_address1 || "";
+    this.address2 = b.bidder_address2 || "";
+    this.city = b.bidder_city || "";
+    this.state = b.bidder_state || "";
+    this.zip = b.bidder_zip || "";
     this.bidderNum = b.bidder_num?.toString() || "";
     this.existingId.set(b.bidder_id);
   }
@@ -233,6 +263,11 @@ export class BidderFormComponent implements OnInit {
     this.firstName = "";
     this.lastName = "";
     this.email = "";
+    this.address1 = "";
+    this.address2 = "";
+    this.city = "";
+    this.state = "";
+    this.zip = "";
     this.bidderNum = "";
     this.existingId.set(null);
     this.success.set(null);
@@ -261,6 +296,11 @@ export class BidderFormComponent implements OnInit {
           bidder_first_name: this.firstName,
           bidder_last_name: this.lastName,
           bidder_email: this.email || null,
+          bidder_address1: this.address1 || null,
+          bidder_address2: this.address2 || null,
+          bidder_city: this.city || null,
+          bidder_state: this.state || null,
+          bidder_zip: this.zip || null,
           bidder_num: this.bidderNum ? Number(this.bidderNum) : null
         }));
         this.success.set(`Updated bidder ${res.bidder_id}`);
@@ -272,6 +312,11 @@ export class BidderFormComponent implements OnInit {
           bidder_first_name: this.firstName,
           bidder_last_name: this.lastName,
           bidder_email: this.email || null,
+          bidder_address1: this.address1 || null,
+          bidder_address2: this.address2 || null,
+          bidder_city: this.city || null,
+          bidder_state: this.state || null,
+          bidder_zip: this.zip || null,
           bidder_num: this.bidderNum ? Number(this.bidderNum) : null
         }));
         this.success.set(`Created bidder ${res.bidder_id}`);

@@ -16,6 +16,11 @@ export const BidderCreate = z.object({
   bidder_first_name: z.string().min(1).max(100).refine(val => !val.includes('*'), { message: "Asterisk cannot be used" }),
   bidder_last_name: z.string().min(1).max(100).refine(val => !val.includes('*'), { message: "Asterisk cannot be used" }),
   bidder_email: z.string().email("Invalid email address - please use a proper email format (e.g., user@example.com or x@x.com)").refine(val => !val.includes('*'), { message: "Asterisk cannot be used" }).nullable().optional(),
+  bidder_address1: z.string().max(100).refine(val => !val.includes('*'), { message: "Asterisk cannot be used" }).nullable().optional(),
+  bidder_address2: z.string().max(100).refine(val => !val.includes('*'), { message: "Asterisk cannot be used" }).nullable().optional(),
+  bidder_city: z.string().max(100).refine(val => !val.includes('*'), { message: "Asterisk cannot be used" }).nullable().optional(),
+  bidder_state: z.string().length(2).refine(val => !val.includes('*'), { message: "Asterisk cannot be used" }).nullable().optional(),
+  bidder_zip: z.string().regex(/^\d{5}(-\d{4})?$/, "Zip must be xxxxx or xxxxx-xxxx").nullable().optional(),
   bidder_credit_card_token: z.string().max(100).refine(val => !val.includes('*'), { message: "Asterisk cannot be used" }).nullable().optional(),
 });
 

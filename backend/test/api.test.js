@@ -106,5 +106,17 @@ describe("API", () => {
     expect(res.status).toBe(400);
     expect(res.body.details[0].message).toBe("Invalid email address - please use a proper email format (e.g., user@example.com or x@x.com)");
   });
+
+  it("POST /bidders rejects invalid zip code", async () => {
+    const app = createApp();
+    const res = await request(app).post("/bidders").send({
+      event_id: 1,
+      bidder_first_name: "John",
+      bidder_last_name: "Doe",
+      bidder_zip: "1234"
+    });
+    expect(res.status).toBe(400);
+    expect(res.body.details[0].message).toBe("Zip must be xxxxx or xxxxx-xxxx");
+  });
 });
 

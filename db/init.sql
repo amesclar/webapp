@@ -32,10 +32,20 @@ CREATE TABLE IF NOT EXISTS bidders (
   bidder_first_name         VARCHAR(100) NOT NULL,
   bidder_last_name          VARCHAR(100) NOT NULL,
   bidder_email              VARCHAR(100),
+  bidder_address1           VARCHAR(100),
+  bidder_address2           VARCHAR(100),
+  bidder_city               VARCHAR(100),
+  bidder_state              VARCHAR(2),
+  bidder_zip                VARCHAR(10),
   bidder_credit_card_token  VARCHAR(100),
 
   CONSTRAINT fk_bidders_event
-    FOREIGN KEY (event_id) REFERENCES events (event_id)
+    FOREIGN KEY (event_id) REFERENCES events (event_id),
+
+  CONSTRAINT chk_bidders_zip_format
+  CHECK (
+    bidder_zip IS NULL OR bidder_zip ~ '^\d{5}(-\d{4})?$'
+  )
 );
 
 -- bidder_num: "sequential within event" (spec) when provided.

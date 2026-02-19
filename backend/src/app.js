@@ -193,8 +193,10 @@ export function createApp() {
       const body = parseBody(BidderCreate, req.body);
       const r = await query(
         `insert into bidders
-          (event_id, bidder_num, bidder_first_name, bidder_last_name, bidder_email, bidder_credit_card_token)
-         values ($1,$2,$3,$4,$5,$6)
+          (event_id, bidder_num, bidder_first_name, bidder_last_name, bidder_email, 
+           bidder_address1, bidder_address2, bidder_city, bidder_state, bidder_zip,
+           bidder_credit_card_token)
+         values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
          returning *`,
         [
           body.event_id,
@@ -202,6 +204,11 @@ export function createApp() {
           body.bidder_first_name,
           body.bidder_last_name,
           body.bidder_email ?? null,
+          body.bidder_address1 ?? null,
+          body.bidder_address2 ?? null,
+          body.bidder_city ?? null,
+          body.bidder_state ?? null,
+          body.bidder_zip ?? null,
           body.bidder_credit_card_token ?? null,
         ],
       );
@@ -217,8 +224,11 @@ export function createApp() {
       const r = await query(
         `update bidders set
           event_id = $1, bidder_num = $2, bidder_first_name = $3,
-          bidder_last_name = $4, bidder_email = $5, bidder_credit_card_token = $6
-         where bidder_id = $7
+          bidder_last_name = $4, bidder_email = $5, 
+          bidder_address1 = $6, bidder_address2 = $7, bidder_city = $8,
+          bidder_state = $9, bidder_zip = $10,
+          bidder_credit_card_token = $11
+         where bidder_id = $12
          returning *`,
         [
           body.event_id,
@@ -226,6 +236,11 @@ export function createApp() {
           body.bidder_first_name,
           body.bidder_last_name,
           body.bidder_email ?? null,
+          body.bidder_address1 ?? null,
+          body.bidder_address2 ?? null,
+          body.bidder_city ?? null,
+          body.bidder_state ?? null,
+          body.bidder_zip ?? null,
           body.bidder_credit_card_token ?? null,
           req.params.id
         ],

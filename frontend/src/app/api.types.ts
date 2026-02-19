@@ -17,6 +17,11 @@ export type BidderRow = {
     bidder_first_name: string;
     bidder_last_name: string;
     bidder_email: string | null;
+    bidder_address1: string | null;
+    bidder_address2: string | null;
+    bidder_city: string | null;
+    bidder_state: string | null;
+    bidder_zip: string | null;
     bidder_credit_card_token: string | null;
 };
 
