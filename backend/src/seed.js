@@ -98,3 +98,34 @@ export async function loadDemoData() {
         winningBidsCount: winnerCount
     };
 }
+
+export async function purgeDemoData() {
+    console.log('--- Demo Data Purge Agent ---');
+    try {
+        // Find events where is_demo = 'yes' and event_date < current_date - 5 days
+        const expiredEvents = await query(
+            `SELECT event_id, event_desc FROM events 
+             WHERE is_demo = 'yes' AND event_date < CURRENT_DATE - INTERVAL '5 days'`
+        );
+
+        if (expiredEvents.rows.length === 0) {
+            console.log('No expired demo data found.');
+            return;
+        }
+
+        for (const event of expiredEvents.rows) {
+            console.log(`Purging demo event ID ${event.event_id}: ${event.event_desc}`);
+
+            // Delete in order to satisfy foreign keys
+            await query("DELETE FROM winning_bids WHERE event_id = $1", [event.event_id]);
+            await query("DELETE FROM bidders WHERE event_id = $1", [event.event_id]);
+            await query("DELETE FROM items WHERE event_id = $1", [event.event_id]);
+            await query("DELETE FROM events WHERE event_id = $1", [event.event_id]);
+
+            console.log(`✓ Purged event ${event.event_id}`);
+        }
+        console.log(`Total demo events purged: ${expiredEvents.rows.length}`);
+    } catch (err) {
+        console.error('Error during demo data purge:', err);
+    }
+}
