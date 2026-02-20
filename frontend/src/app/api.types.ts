@@ -8,6 +8,7 @@ export type EventRow = {
     contact_last_name: string | null;
     contact_email: string | null;
     contact_phone: string | null;
+    is_demo: "yes" | "no";
 };
 
 export type BidderRow = {

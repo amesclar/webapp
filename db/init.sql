@@ -17,10 +17,15 @@ CREATE TABLE IF NOT EXISTS events (
   contact_last_name  VARCHAR(100),
   contact_email      VARCHAR(100),
   contact_phone      VARCHAR(100),
+  is_demo            VARCHAR(3) DEFAULT 'no' NOT NULL,
 
   CONSTRAINT chk_events_email_format
   CHECK (
     contact_email IS NULL OR contact_email ~* '^[A-Z0-9._%+\-]+@[A-Z0-9.\-]+\.[A-Z]{2,}$'
+  ),
+  CONSTRAINT chk_events_is_demo
+  CHECK (
+    is_demo IN ('yes', 'no')
   )
 );
 

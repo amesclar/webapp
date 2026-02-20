@@ -8,6 +8,7 @@ export const EventCreate = z.object({
   contact_last_name: z.string().max(100).refine(val => !val.includes('*'), { message: "Asterisk cannot be used" }).nullable().optional(),
   contact_email: z.string().email("Invalid email address").refine(val => !val.includes('*'), { message: "Asterisk cannot be used" }).nullable().optional(),
   contact_phone: z.string().max(100).refine(val => !val.includes('*'), { message: "Asterisk cannot be used" }).nullable().optional(),
+  is_demo: z.enum(["yes", "no"]).default("no"),
 });
 
 export const BidderCreate = z.object({
@@ -38,7 +39,7 @@ export const WinningBidCreate = z.object({
   winning_bid: z.number().nonnegative(),
 });
 
-export const EventUpdate = EventCreate;
+export const EventUpdate = EventCreate.omit({ is_demo: true });
 export const BidderUpdate = BidderCreate;
 export const ItemUpdate = ItemCreate;
 export const WinningBidUpdate = WinningBidCreate;

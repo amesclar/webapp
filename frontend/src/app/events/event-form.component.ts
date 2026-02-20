@@ -47,6 +47,13 @@ import { EventRow } from "../api.types";
             <label>Contact Phone</label>
             <input [(ngModel)]="contactPhone" placeholder="Optional" />
           </div>
+          <div class="row" *ngIf="!existingId()">
+            <label>Is Demo?</label>
+            <select [(ngModel)]="isDemo">
+              <option value="no">No</option>
+              <option value="yes">Yes</option>
+            </select>
+          </div>
           <div class="actions">
             <button class="btn-primary" (click)="save()" [disabled]="busy() || !desc || !date">Save</button>
             <button class="btn-secondary" (click)="cancel()">Cancel</button>
@@ -69,6 +76,7 @@ import { EventRow } from "../api.types";
                   <th (click)="toggleSort('contact_last_name')">Contact Last Name {{ sortColumn() === 'contact_last_name' ? (sortDirection() === 'asc' ? '↑' : '↓') : '' }}</th>
                   <th (click)="toggleSort('contact_email')">Contact Email {{ sortColumn() === 'contact_email' ? (sortDirection() === 'asc' ? '↑' : '↓') : '' }}</th>
                   <th (click)="toggleSort('contact_phone')">Contact Phone {{ sortColumn() === 'contact_phone' ? (sortDirection() === 'asc' ? '↑' : '↓') : '' }}</th>
+                  <th (click)="toggleSort('is_demo')">Demo {{ sortColumn() === 'is_demo' ? (sortDirection() === 'asc' ? '↑' : '↓') : '' }}</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -82,6 +90,7 @@ import { EventRow } from "../api.types";
                   <td>{{ e.contact_last_name }}</td>
                   <td>{{ e.contact_email }}</td>
                   <td>{{ e.contact_phone }}</td>
+                  <td><span class="badge" [class.badge-yes]="e.is_demo === 'yes'">{{ e.is_demo }}</span></td>
                   <td>
                     <button class="btn-danger btn-sm" (click)="delete($event, e.event_id)">Delete</button>
                   </td>
@@ -119,6 +128,9 @@ import { EventRow } from "../api.types";
     .asterisk { color: #dc3545; }
     input:required:invalid { border-color: rgba(220, 53, 69, 0.5); }
     input:required:valid { border-color: rgba(40, 167, 69, 0.3); }
+    select { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; color: #000; background: white; }
+    .badge { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; background: #eee; text-transform: uppercase; }
+    .badge-yes { background: #ffd700; color: #000; }
   `]
 })
 export class EventFormComponent implements OnInit {
@@ -129,6 +141,7 @@ export class EventFormComponent implements OnInit {
   contactLastName = "";
   contactEmail = "";
   contactPhone = "";
+  isDemo: "yes" | "no" = "no";
   existingId = signal<number | null>(null);
   events = signal<EventRow[]>([]);
   sortColumn = signal<keyof EventRow | null>(null);
@@ -183,6 +196,7 @@ export class EventFormComponent implements OnInit {
     this.contactLastName = e.contact_last_name || "";
     this.contactEmail = e.contact_email || "";
     this.contactPhone = e.contact_phone || "";
+    this.isDemo = e.is_demo;
     this.existingId.set(e.event_id);
   }
 
@@ -194,6 +208,7 @@ export class EventFormComponent implements OnInit {
     this.contactLastName = "";
     this.contactEmail = "";
     this.contactPhone = "";
+    this.isDemo = "no";
     this.existingId.set(null);
     this.success.set(null);
     this.error.set(null);
@@ -229,7 +244,8 @@ export class EventFormComponent implements OnInit {
           contact_first_name: this.contactFirstName || null,
           contact_last_name: this.contactLastName || null,
           contact_email: this.contactEmail || null,
-          contact_phone: this.contactPhone || null
+          contact_phone: this.contactPhone || null,
+          is_demo: this.isDemo
         }));
         this.success.set(`Created event ${res.event_id}`);
         this.cancel();
