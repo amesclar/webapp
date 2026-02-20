@@ -8,6 +8,7 @@ import {
   ItemCreate, ItemUpdate,
   WinningBidCreate, WinningBidUpdate
 } from "./validate.js";
+import { loadDemoData } from "./seed.js";
 
 export function createApp() {
   const app = express();
@@ -18,6 +19,15 @@ export function createApp() {
       origin: process.env.CORS_ORIGIN || true,
     }),
   );
+
+  app.post("/load_demo_data", async (req, res, next) => {
+    try {
+      const result = await loadDemoData();
+      res.json(result);
+    } catch (e) {
+      next(e);
+    }
+  });
 
   app.get("/healthz", async (_req, res) => {
     try {

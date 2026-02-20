@@ -29,6 +29,10 @@ export const routes: Routes = [
         path: "winning-bids",
         loadComponent: () => import("./winning-bids/winning-bid-form.component").then(m => m.WinningBidFormComponent),
     },
+    {
+        path: "load_demo_data",
+        loadComponent: () => import("./load-demo-data.component").then(m => m.LoadDemoDataComponent),
+    },
     { path: "", redirectTo: "admin", pathMatch: "full" },
     { path: "**", redirectTo: "admin" },
 ];

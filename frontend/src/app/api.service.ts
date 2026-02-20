@@ -16,6 +16,10 @@ export class ApiService {
         return this.http.get<EventRow[]>(`${this.base}/events`, { params });
     }
 
+    loadDemoData() {
+        return this.http.post<any>(`${this.base}/load_demo_data`, {});
+    }
+
     createEvent(payload: {
         event_desc: string;
         event_date: string;
